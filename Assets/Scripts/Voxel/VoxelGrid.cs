@@ -15,6 +15,12 @@ public class VoxelGrid : MonoBehaviour
 
     private Material[] voxelMaterials;
 
+
+    private Mesh mesh;
+
+    private List<Vector3> vertices;
+    private List<int> triangles;
+
     public void Initialize(int resolution, float size)
     {
         this.resolution = resolution;
@@ -31,15 +37,15 @@ public class VoxelGrid : MonoBehaviour
                 CreateVoxel(i++, x, y);
             }
         }
-        SetVoxelColors();
+        Refresh();
     }
 
     private void CreateVoxel(int i, int x, int y)
     {
         GameObject o = Instantiate(voxelPrefab) as GameObject;
         o.transform.parent = transform;
-        o.transform.localPosition = new Vector3((x + 0.5f) * voxelSize, (y + 0.5f) * voxelSize);
-        o.transform.localScale = Vector3.one * voxelSize;
+        o.transform.localPosition = new Vector3((x + 0.5f) * voxelSize, (y + 0.5f) * voxelSize, -0.01f);
+        o.transform.localScale = Vector3.one * voxelSize;// * .5f;
 
         //save the material for coloring..
         voxelMaterials[i] = o.GetComponent<MeshRenderer>().material;
@@ -74,7 +80,7 @@ public class VoxelGrid : MonoBehaviour
                 voxels[i] = stencil.Apply(x, y, voxels[i]);
             }
         }
-        SetVoxelColors(); // sets all the voxels.. apprently theres a reason for the madness
+        Refresh();
     }
 
     [Obsolete]
@@ -83,6 +89,17 @@ public class VoxelGrid : MonoBehaviour
         voxels[x * resolution + y] = state;
 
         SetVoxelColors(); // sets all the voxels.. apprently theres a reason for the madness
+    }
+
+    private void Refresh()
+    {
+        SetVoxelColors();
+        Triangulate();
+    }
+
+    private void Triangulate()
+    {
+        throw new NotImplementedException();
     }
 
     private void SetVoxelColors()
