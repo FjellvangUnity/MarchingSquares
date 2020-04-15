@@ -174,7 +174,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1
+  orthographic size: 2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size: 3
-  voxelResolution: 4
+  voxelResolution: 8
   chunkResolution: 3
   voxelGridPrefab: {fileID: 1531505362192553617, guid: 9c861db9fd663e34c864790fc7bf0b3e,
     type: 3}
