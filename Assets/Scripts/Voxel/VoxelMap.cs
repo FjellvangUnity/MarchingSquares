@@ -48,6 +48,18 @@ public class VoxelMap : MonoBehaviour
         chunk.transform.parent = transform;
         chunk.transform.localPosition = new Vector3(x * chunkSize - halfSize, y * chunkSize - halfSize);
         chunks[i] = chunk;
+        if (x > 0)
+        {
+            chunks[i - 1].xNeighbor = chunk;
+        }
+        if (y > 0)
+        {
+            chunks[i - chunkResolution].yNeighbor = chunk;
+            if (x > 0)
+            {
+                chunks[i - chunkResolution - 1].xyNeighbor = chunk;
+            }
+        }
     }
 
 
@@ -97,17 +109,17 @@ public class VoxelMap : MonoBehaviour
         activeStencil.Initialize(fillTypeIndex == 0, radiusIndex);
 
         int voxelYOffset = yStart * voxelResolution;
-        for (int y = yStart; y <= yEnd; y++)
+        for (int y = yEnd; y >= yStart; y--)
         {
-            int i = y * chunkResolution + xStart;
-            int voxelXOffset = xStart * voxelResolution;
-            for (int x = xStart; x <= xEnd; x++, i++)
+            int i = y * chunkResolution + xEnd;
+            int voxelXOffset = xEnd * voxelResolution;
+            for (int x = xEnd; x >= xStart; x--, i--)
             {
                 activeStencil.SetCenter(voxelCenterX - voxelXOffset, voxelCenterY - voxelYOffset);
                 chunks[i].Apply(activeStencil);
-                voxelXOffset += voxelResolution;
+                voxelXOffset -= voxelResolution;
             }
-            voxelYOffset += voxelResolution;
+            voxelYOffset -= voxelResolution;
         }
     }
 
